@@ -11,6 +11,9 @@ efficient, and unobtrusive. It does its job then gets out of your way.
 This docker packages **taskd**, Taskwarrior sync server, under [Alpine
 Linux](https://alpinelinux.org/), a lightweight Linux distribution.
 
+Visit [Docker Hub](https://hub.docker.com/r/ogarcia/taskd/) to see all
+available tags.
+
 ## Run
 
 To run this container exposing taskd default port and making the data volume
