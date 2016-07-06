@@ -1,6 +1,6 @@
 # Taskwarrior Server (taskd) Docker
 
-(c) 2015 Óscar García Amor
+(c) 2015-2016 Óscar García Amor
 Redistribution, modifications and pull requests are welcomed under the terms
 of MIT license.
 
