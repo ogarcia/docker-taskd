@@ -36,9 +36,9 @@ if ! test -e ${TASKDDATA}/config; then
 
 fi
 
-# Exec CMD or S6 by default if nothing present
+# Exec CMD or taskd by default if nothing present
 if [ $# -gt 0 ];then
   exec "$@"
 else
-  exec /usr/bin/s6-svscan /app/taskd/s6/
+  exec taskd server --data ${TASKDDATA}
 fi
