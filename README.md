@@ -1,6 +1,6 @@
-# Taskwarrior Server (taskd) Docker
+# Taskwarrior Server (taskd) Docker [![Build Status](https://travis-ci.org/ogarcia/docker-taskd.svg?branch=master)](https://travis-ci.org/ogarcia/docker-taskd)
 
-(c) 2015-2016 Óscar García Amor
+(c) 2015-2017 Óscar García Amor
 Redistribution, modifications and pull requests are welcomed under the terms
 of MIT license.
 
@@ -11,7 +11,7 @@ efficient, and unobtrusive. It does its job then gets out of your way.
 This docker packages **taskd**, Taskwarrior sync server, under [Alpine
 Linux](https://alpinelinux.org/), a lightweight Linux distribution.
 
-Visit [Docker Hub](https://hub.docker.com/r/ogarcia/taskd/) to see all
+Visit [Docker Hub](https://hub.docker.com/r/connectical/taskd/) to see all
 available tags.
 
 ## Run
@@ -24,7 +24,7 @@ docker run -d \
   --name=taskd \
   -p 53589:53589 \
   -v /srv/taskd:/var/taskd \
-  ogarcia/taskd
+  connectical/taskd
 ```
 
 This makes a set of self signed certificates and minimal configuration to
@@ -59,7 +59,7 @@ docker in interactive mode, simply do.
 ```sh
 docker run -ti --rm \
   -v /srv/taskd:/var/taskd \
-  ogarcia/taskd /bin/sh
+  connectical/taskd /bin/sh
 ```
 
 This mounts the permanent data volume `/srv/taskd` into **taskd** data

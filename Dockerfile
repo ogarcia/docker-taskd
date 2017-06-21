@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:latest
 MAINTAINER Oscar Garcia Amor (https://ogarcia.me)
 
 # Install necessary stuff
