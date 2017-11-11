@@ -1,4 +1,7 @@
-# Taskwarrior Server (taskd) Docker [![Build Status](https://travis-ci.org/ogarcia/docker-taskd.svg?branch=master)](https://travis-ci.org/ogarcia/docker-taskd)
+# ARM fork of Taskwarrior Server (taskd) Docker
+
+This fork has the same code as
+[ogarcia](https://github.com/ogarcia/docker-taskd) repo but for arm.
 
 (c) 2015-2017 Óscar García Amor
 Redistribution, modifications and pull requests are welcomed under the terms
