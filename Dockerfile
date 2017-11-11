@@ -1,5 +1,5 @@
-FROM alpine:latest
-MAINTAINER Oscar Garcia Amor (https://ogarcia.me)
+FROM lyzz/rpi-alpine-scratch:latest
+MAINTAINER lyz (https://git.fok.systems/lyz)
 
 # Install necessary stuff
 RUN apk -U --no-progress upgrade && \
