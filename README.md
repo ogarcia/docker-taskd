@@ -30,6 +30,11 @@ docker run -d \
 This makes a set of self signed certificates and minimal configuration to
 run server.
 
+Please note that the generated certificated will have their `CN` set to `localhost`. In order to modify the parameters used for the certificate generation:
+- Delete everything in `/pki/` except the generate scripts (`generate*`) and the `vars` file.
+- Edit the `vars` file.
+- Run `docker exec -it <container-id> /var/taskd/pki/generate`.
+
 ## Manual setup
 
 The `run.sh` script that launch **taskd** server always look for config file
