@@ -1,12 +1,13 @@
-FROM alpine:latest
-MAINTAINER Oscar Garcia Amor (https://ogarcia.me)
+ARG ALPINE_VERSION
+
+FROM alpine:${ALPINE_VERSION}
 
 # Install necessary stuff
 RUN apk -U --no-progress upgrade && \
   apk -U --no-progress add taskd taskd-pki
 
 # Import build and startup script
-COPY docker /app/taskd/
+COPY .circleci/run.sh /app/taskd/
 
 # Set the data location
 ARG TASKDDATA

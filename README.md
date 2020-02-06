@@ -1,18 +1,23 @@
 # Taskwarrior Server (taskd) Docker [![Build Status](https://travis-ci.org/ogarcia/docker-taskd.svg?branch=master)](https://travis-ci.org/ogarcia/docker-taskd)
 
-(c) 2015-2017 Óscar García Amor
+(c) 2015-2020 Óscar García Amor
+
 Redistribution, modifications and pull requests are welcomed under the terms
 of MIT license.
 
-[Taskwarrior](https://www.taskwarrior.org) is Free and Open Source Software
-that manages your TODO list from your command line. It is flexible, fast,
-efficient, and unobtrusive. It does its job then gets out of your way.
+[Taskwarrior][1] is Free and Open Source Software that manages your TODO
+list from your command line. It is flexible, fast, efficient, and
+unobtrusive. It does its job then gets out of your way.
 
 This docker packages **taskd**, Taskwarrior sync server, under [Alpine
-Linux](https://alpinelinux.org/), a lightweight Linux distribution.
+Linux][2], a lightweight Linux distribution.
 
-Visit [Docker Hub](https://hub.docker.com/r/connectical/taskd/) to see all
-available tags.
+Visit [Docker Hub][3] or [Quay][4] to see all available tags.
+
+[1]: https://www.taskwarrior.org/
+[2]: https://alpinelinux.org/
+[3]: https://hub.docker.com/r/connectical/taskd/
+[4]: https://quay.io/repository/connectical/taskd/
 
 ## Run
 
@@ -53,8 +58,10 @@ make modifications that you need. The significant files are.
 You can do any changes to this, but remember that if you delete `config`
 file, the `run.sh` script will rebuild everything.
 
-Please refer to [Taskwarrior Docs](https://taskwarrior.org/docs/) to know
-how do modifications, add users, etc.
+Please refer to [Taskwarrior Docs][5] to know how do modifications, add
+users, etc.
+
+[5]: https://taskwarrior.org/docs/
 
 ## Shell run
 
