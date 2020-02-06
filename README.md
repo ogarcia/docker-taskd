@@ -1,4 +1,4 @@
-# Taskwarrior Server (taskd) Docker [![Build Status](https://travis-ci.org/ogarcia/docker-taskd.svg?branch=master)](https://travis-ci.org/ogarcia/docker-taskd)
+# Taskwarrior Server (taskd) Docker [![CircleCI](https://circleci.com/gh/ogarcia/docker-taskd.svg?style=svg)](https://circleci.com/gh/ogarcia/docker-taskd)
 
 (c) 2015-2020 Óscar García Amor
 
