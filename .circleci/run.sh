@@ -1,7 +1,7 @@
 #! /bin/sh
 #
 # run.sh
-# Copyright (C) 2015-2020 Óscar García Amor <ogarcia@connectical.com>
+# Copyright (C) 2015-2021 Óscar García Amor <ogarcia@connectical.com>
 #
 # Distributed under terms of the MIT license.
 #
