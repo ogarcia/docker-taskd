@@ -1,13 +1,13 @@
 version: 2.1
 
 executors:
-  docker-build-buster:
+  docker-build-jammy:
     docker:
-      - image: circleci/buildpack-deps:buster
+      - image: cimg/base:current-22.04
 
 jobs:
   build:
-    executor: docker-build-buster
+    executor: docker-build-jammy
     steps:
       - checkout
       - setup_remote_docker:
@@ -23,7 +23,7 @@ jobs:
           paths:
             - ./image.tar
   test:
-    executor: docker-build-buster
+    executor: docker-build-jammy
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -37,7 +37,7 @@ jobs:
           name: Test Docker image
           command: make docker-test
   publish-dockerhub:
-    executor: docker-build-buster
+    executor: docker-build-jammy
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -51,7 +51,7 @@ jobs:
           name: Push Docker image to Docker Hub
           command: make dockerhub-push
   publish-quay:
-    executor: docker-build-buster
+    executor: docker-build-jammy
     steps:
       - attach_workspace:
           at: /tmp/workspace
