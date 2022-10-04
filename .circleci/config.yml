@@ -1,17 +1,17 @@
 version: 2.1
 
 executors:
-  docker-build-jammy:
+  docker-build-current:
     docker:
       - image: cimg/base:current-22.04
 
 jobs:
   build:
-    executor: docker-build-jammy
+    executor: docker-build-current
     steps:
       - checkout
       - setup_remote_docker:
-          version: 18.09.3
+          version: 20.10.17
       - run:
           name: Build Docker image
           command: make docker-build
@@ -23,13 +23,13 @@ jobs:
           paths:
             - ./image.tar
   test:
-    executor: docker-build-jammy
+    executor: docker-build-current
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
       - setup_remote_docker:
-          version: 18.09.3
+          version: 20.10.17
       - run:
           name: Load archived Docker image
           command: DOCKER_IMAGE_FILENAME=/tmp/workspace/image.tar make docker-load
@@ -37,13 +37,13 @@ jobs:
           name: Test Docker image
           command: make docker-test
   publish-dockerhub:
-    executor: docker-build-jammy
+    executor: docker-build-current
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
       - setup_remote_docker:
-          version: 18.09.3
+          version: 20.10.17
       - run:
           name: Load archived Docker image
           command: DOCKER_IMAGE_FILENAME=/tmp/workspace/image.tar make docker-load
@@ -51,13 +51,13 @@ jobs:
           name: Push Docker image to Docker Hub
           command: make dockerhub-push
   publish-quay:
-    executor: docker-build-jammy
+    executor: docker-build-current
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
       - setup_remote_docker:
-          version: 18.09.3
+          version: 20.10.17
       - run:
           name: Load archived Docker image
           command: DOCKER_IMAGE_FILENAME=/tmp/workspace/image.tar make docker-load
