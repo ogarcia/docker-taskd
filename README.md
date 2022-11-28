@@ -35,10 +35,37 @@ docker run -d \
 This makes a set of self signed certificates and minimal configuration to
 run server.
 
-Please note that the generated certificated will have their `CN` set to `localhost`. In order to modify the parameters used for the certificate generation:
+## Environment variables
+
+Certificate attributes can be customized using environment variables.
+
+| Variable | Default value |
+| --- | --- |
+| `CERT_BITS` | 4096 |
+| `CERT_EXPIRATION_DAYS` | 365 |
+| `CERT_ORGANIZATION` | "Göteborg Bit Factory" |
+| `CERT_CN` | localhost |
+| `CERT_COUNTRY` | SE |
+| `CERT_STATE` | "Västra Götaland" |
+| `CERT_LOCALITY` | "Göteborg" |
+
+Note that, by default, the generated certificates will have their `CN` set
+to `localhost`.
+
+To regenerate certificates or modify their parameters:
 - Delete everything in `/pki/` except the generate scripts (`generate*`) and the `vars` file.
-- Edit the `vars` file.
-- Run `docker exec -it <container-id> /var/taskd/pki/generate`.
+- Run (modify the variables to what you need)
+  ```sh
+  docker exec -t -i \
+    -e CERT_BITS=4096 \
+    -e CERT_EXPIRATION_DAYS=365 \
+    -e CERT_ORGANIZATION="Göteborg Bit Factory" \
+    -e CERT_CN=localhost \
+    -e CERT_COUNTRY=SE \
+    -e CERT_STATE="Västra Götaland" \
+    -e CERT_LOCALITY="Göteborg" \
+    <container-id> /var/taskd/pki/generate
+  ```
 
 ## Manual setup
 
@@ -47,7 +74,7 @@ in data volume `/var/taskd`. If found it, simply run the server, but if
 config file is absent `run.sh` will build a new default config and its
 certificates.
 
-If you make the data volume permanent you'll can access to its contents and
+If you make the data volume permanent you can access to its contents and
 make modifications that you need. The significant files are.
 
 * `config` taskd config itself.
