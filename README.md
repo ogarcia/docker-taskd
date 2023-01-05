@@ -12,12 +12,13 @@ unobtrusive. It does its job then gets out of your way.
 This docker packages **taskd**, Taskwarrior sync server, under [Alpine
 Linux][2], a lightweight Linux distribution.
 
-Visit [Docker Hub][3] or [Quay][4] to see all available tags.
+Visit [Docker Hub][3], [Quay][4] or [GitHub][5] to see all available tags.
 
 [1]: https://www.taskwarrior.org/
 [2]: https://alpinelinux.org/
 [3]: https://hub.docker.com/r/connectical/taskd/
 [4]: https://quay.io/repository/connectical/taskd/
+[5]: https://github.com/orgs/connectical/packages/container/package/taskd
 
 ## Run
 
@@ -85,10 +86,10 @@ make modifications that you need. The significant files are.
 You can do any changes to this, but remember that if you delete `config`
 file, the `run.sh` script will rebuild everything.
 
-Please refer to [Taskwarrior Docs][5] to know how do modifications, add
+Please refer to [Taskwarrior Docs][6] to know how do modifications, add
 users, etc.
 
-[5]: https://taskwarrior.org/docs/
+[6]: https://taskwarrior.org/docs/
 
 ## Shell run
 

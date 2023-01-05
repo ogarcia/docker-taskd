@@ -21,6 +21,14 @@ ifndef QUAY_PASSWORD
 	$(error QUAY_PASSWORD is undefined)
 endif
 
+check-github-registry-env:
+ifndef GITHUB_REGISTRY_USERNAME
+	$(error GITHUB_REGISTRY_USERNAME is undefined)
+endif
+ifndef GITHUB_REGISTRY_PASSWORD
+	$(error GITHUB_REGISTRY_PASSWORD is undefined)
+endif
+
 docker-build:
 	docker build -t $(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE) --build-arg ALPINE_VERSION=$(ALPINE_VERSION) .
 
@@ -54,5 +62,14 @@ ifdef CIRCLE_TAG
 	docker push quay.io/$(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):${CIRCLE_TAG}
 endif
 
-.PHONY: all check-dockerhub-env check-quay-env docker-build docker-test docker-save dockerhub-push quay-push
+github-registry-push: check-github-registry-env
+	echo "${GITHUB_REGISTRY_PASSWORD}" | docker login -u "${GITHUB_REGISTRY_USERNAME}" --password-stdin ghcr.io
+	docker tag $(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):latest ghcr.io/$(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):latest
+	docker push ghcr.io/$(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):latest
+ifdef CIRCLE_TAG
+	docker tag $(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):latest ghcr.io/$(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):${CIRCLE_TAG}
+	docker push ghcr.io/$(DOCKER_ORGANIZATION)/$(DOCKER_IMAGE):${CIRCLE_TAG}
+endif
+
+.PHONY: all check-dockerhub-env check-quay-env check-github-registry-env docker-build docker-test docker-save dockerhub-push quay-push github-registry-push
 # vim:ft=make

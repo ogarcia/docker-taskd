@@ -64,6 +64,20 @@ jobs:
       - run:
           name: Push Docker image to Quay.io
           command: make quay-push
+  publish-github-registry:
+    executor: docker-build-current
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.17
+      - run:
+          name: Load archived Docker image
+          command: DOCKER_IMAGE_FILENAME=/tmp/workspace/image.tar make docker-load
+      - run:
+          name: Push Docker image to ghcr.io
+          command: make github-registry-push
 
 workflows:
   version: 2
@@ -80,6 +94,7 @@ workflows:
             tags:
               only: /.*/
       - publish-dockerhub:
+          context: dockerhub
           requires:
             - test
           filters:
@@ -88,6 +103,16 @@ workflows:
             branches:
               ignore: /.*/
       - publish-quay:
+          context: quay-nn
+          requires:
+            - test
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - publish-github-registry:
+          context: github-registry
           requires:
             - test
           filters:
