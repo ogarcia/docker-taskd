@@ -53,19 +53,47 @@ Certificate attributes can be customized using environment variables.
 Note that, by default, the generated certificates will have their `CN` set
 to `localhost`.
 
-To regenerate certificates or modify their parameters:
-- Delete everything in `/pki/` except the generate scripts (`generate*`) and the `vars` file.
-- Run (modify the variables to what you need)
-  ```sh
+If you have never run the container you can launch it as follows to set the
+certificate values.
+```
+docker run -d \
+  --name=taskd \
+  -e CERT_BITS=4096 \
+  -e CERT_EXPIRATION_DAYS=365 \
+  -e CERT_ORGANIZATION="Göteborg Bit Factory" \
+  -e CERT_CN=localhost \
+  -e CERT_COUNTRY=SE \
+  -e CERT_STATE="Västra Götaland" \
+  -e CERT_LOCALITY="Göteborg" \
+  -p 53589:53589 \
+  -v /srv/taskd:/var/taskd \
+  connectical/taskd
+```
+
+If you have the container running and you need to regenerate the
+certificates or modify their parameters.
+
+- Make sure that the container is running.
+- Execute a shell in the running container.
+  ```shell
   docker exec -t -i \
-    -e CERT_BITS=4096 \
-    -e CERT_EXPIRATION_DAYS=365 \
-    -e CERT_ORGANIZATION="Göteborg Bit Factory" \
-    -e CERT_CN=localhost \
-    -e CERT_COUNTRY=SE \
-    -e CERT_STATE="Västra Götaland" \
-    -e CERT_LOCALITY="Göteborg" \
-    <container-id> /var/taskd/pki/generate
+    <container-id> sh
+  ```
+- Go to `/var/taskd/pki` and delete all pem files, you should be left with
+  only the generate scripts (`generate*`) and the `vars` file.
+  ```shell
+  rm *pem
+  ```
+- Run.
+  ```shell
+  export CERT_BITS=4096
+  export CERT_EXPIRATION_DAYS=365
+  export CERT_ORGANIZATION="Göteborg Bit Factory"
+  export CERT_CN=localhost
+  export CERT_COUNTRY=SE
+  export CERT_STATE="Västra Götaland"
+  export CERT_LOCALITY="Göteborg"
+  ./generate
   ```
 
 ## Manual setup
