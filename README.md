@@ -1,4 +1,4 @@
-# Taskwarrior Server (taskd) Docker [![CircleCI](https://circleci.com/gh/ogarcia/docker-taskd.svg?style=svg)](https://circleci.com/gh/ogarcia/docker-taskd)
+# Taskwarrior Server (taskd) container [![CircleCI](https://circleci.com/gh/ogarcia/docker-taskd.svg?style=svg)](https://circleci.com/gh/ogarcia/docker-taskd)
 
 (c) 2015-2023 Óscar García Amor
 
@@ -9,16 +9,15 @@ of MIT license.
 list from your command line. It is flexible, fast, efficient, and
 unobtrusive. It does its job then gets out of your way.
 
-This docker packages **taskd**, Taskwarrior sync server, under [Alpine
+This container packages **taskd**, Taskwarrior sync server, under [Alpine
 Linux][2], a lightweight Linux distribution.
 
-Visit [Docker Hub][3], [Quay][4] or [GitHub][5] to see all available tags.
+Visit [Quay][3] or [GitHub][4] to see all available tags.
 
 [1]: https://www.taskwarrior.org/
 [2]: https://alpinelinux.org/
-[3]: https://hub.docker.com/r/connectical/taskd/
-[4]: https://quay.io/repository/connectical/taskd/
-[5]: https://github.com/orgs/connectical/packages/container/package/taskd
+[3]: https://quay.io/repository/connectical/taskd/
+[4]: https://github.com/orgs/connectical/packages/container/package/taskd
 
 ## Run
 
@@ -30,7 +29,7 @@ docker run -d \
   --name=taskd \
   -p 53589:53589 \
   -v /srv/taskd:/var/taskd \
-  connectical/taskd
+  ghcr.io/connectical/taskd
 ```
 
 This makes a set of self signed certificates and minimal configuration to
@@ -67,7 +66,7 @@ docker run -d \
   -e CERT_LOCALITY="Göteborg" \
   -p 53589:53589 \
   -v /srv/taskd:/var/taskd \
-  connectical/taskd
+  ghcr.io/connectical/taskd
 ```
 
 If you have the container running and you need to regenerate the
@@ -122,15 +121,15 @@ users, etc.
 ## Shell run
 
 In some cases, you could need to run `taskd` command. You can run this
-docker in interactive mode, simply do.
+container in interactive mode, simply do.
 
 ```sh
 docker run -ti --rm \
   -v /srv/taskd:/var/taskd \
-  connectical/taskd /bin/sh
+  ghcr.io/connectical/taskd /bin/sh
 ```
 
 This mounts the permanent data volume `/srv/taskd` into **taskd** data
 directory and gives you a interactive shell to work.
 
-Please note that the `--rm` modifier destroy the docker after shell exit.
+Please note that the `--rm` modifier destroy the container after shell exit.
