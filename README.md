@@ -16,7 +16,7 @@ Visit [Quay][3] or [GitHub][4] to see all available tags.
 
 [1]: https://www.taskwarrior.org/
 [2]: https://alpinelinux.org/
-[3]: https://quay.io/repository/connectical/taskd/
+[3]: https://quay.io/repository/connectical/taskd
 [4]: https://github.com/orgs/connectical/packages/container/package/taskd
 
 ## Run
