@@ -1,9 +1,17 @@
-ALPINE_VERSION := 3.17.2
+ALPINE_VERSION := 3.17.3
 CONTAINER_ORGANIZATION := connectical
 CONTAINER_IMAGE := taskd
-CONTAINER_IMAGE_FILENAME ?= $(CONTAINER_ORGANIZATION)_$(CONTAINER_IMAGE).tar
+CONTAINER_ARCHITECTURES := linux/amd64,linux/arm/v7,linux/arm64
+TAGS := -t quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):master
+TAGS += -t ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):master
+ifdef CIRCLE_TAG
+	TAGS := -t quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
+	TAGS += -t ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
+	TAGS += -t quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
+	TAGS += -t ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
+endif
 
-all: container-build container-test
+all: container-build
 
 check-quay-env:
 ifndef QUAY_USERNAME
@@ -24,36 +32,13 @@ endif
 container-build:
 	docker build -t $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE) --build-arg ALPINE_VERSION=$(ALPINE_VERSION) .
 
-container-test:
-	docker image inspect $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE)
-	docker run --rm $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE) taskd --version
+container-buildx:
+	docker buildx build -t $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE) --platform $(CONTAINER_ARCHITECTURES) --build-arg ALPINE_VERSION=$(ALPINE_VERSION) .
 
-container-save:
-	docker image inspect $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE) > /dev/null 2>&1
-	docker save -o $(CONTAINER_IMAGE_FILENAME) $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE)
-
-container-load:
-ifneq ($(wildcard $(CONTAINER_IMAGE_FILENAME)),)
-	docker load -i $(CONTAINER_IMAGE_FILENAME)
-endif
-
-quay-push: check-quay-env
+container-buildx-push: check-quay-env check-github-registry-env
 	echo "${QUAY_PASSWORD}" | docker login -u "${QUAY_USERNAME}" --password-stdin quay.io
-	docker tag $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
-	docker push quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
-ifdef CIRCLE_TAG
-	docker tag $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
-	docker push quay.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
-endif
-
-github-registry-push: check-github-registry-env
 	echo "${GITHUB_REGISTRY_PASSWORD}" | docker login -u "${GITHUB_REGISTRY_USERNAME}" --password-stdin ghcr.io
-	docker tag $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
-	docker push ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest
-ifdef CIRCLE_TAG
-	docker tag $(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):latest ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
-	docker push ghcr.io/$(CONTAINER_ORGANIZATION)/$(CONTAINER_IMAGE):${CIRCLE_TAG}
-endif
+	docker buildx build $(TAGS) --platform $(CONTAINER_ARCHITECTURES) --build-arg ALPINE_VERSION=$(ALPINE_VERSION) --push .
 
-.PHONY: all check-quay-env check-github-registry-env container-build container-test container-save quay-push github-registry-push
+.PHONY: all check-quay-env check-github-registry-env container-build container-buildx container-buildx-push
 # vim:ft=make

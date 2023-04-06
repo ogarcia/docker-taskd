@@ -1,99 +1,32 @@
 version: 2.1
 
 executors:
-  docker-build-current:
+  docker-build-jammy:
     docker:
       - image: cimg/base:current-22.04
 
 jobs:
-  build:
-    executor: docker-build-current
+  build-and-publish:
+    executor: docker-build-jammy
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.17
+          version: 20.10.18
       - run:
-          name: Build container image
-          command: make container-build
+          name: Create a new builder instance
+          command: docker buildx create --use
       - run:
-          name: Save container image
-          command: CONTAINER_IMAGE_FILENAME=image.tar make container-save
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./image.tar
-  test:
-    executor: docker-build-current
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.17
-      - run:
-          name: Load archived container image
-          command: CONTAINER_IMAGE_FILENAME=/tmp/workspace/image.tar make container-load
-      - run:
-          name: Test container image
-          command: make container-test
-  publish-quay:
-    executor: docker-build-current
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.17
-      - run:
-          name: Load archived container image
-          command: CONTAINER_IMAGE_FILENAME=/tmp/workspace/image.tar make container-load
-      - run:
-          name: Push container image to Quay.io
-          command: make quay-push
-  publish-github-registry:
-    executor: docker-build-current
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.17
-      - run:
-          name: Load archived container image
-          command: CONTAINER_IMAGE_FILENAME=/tmp/workspace/image.tar make container-load
-      - run:
-          name: Push container image to ghcr.io
-          command: make github-registry-push
+          name: Build and publish
+          command: make container-buildx-push
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build:
+      - build-and-publish:
+          context:
+            - quay-nn
+            - github-registry
           filters:
             tags:
               only: /.*/
-      - test:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /.*/
-      - publish-quay:
-          context: quay-nn
-          requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
-      - publish-github-registry:
-          context: github-registry
-          requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore: /.*/
