@@ -1,6 +1,6 @@
 # Taskwarrior Server (taskd) container [![CircleCI](https://circleci.com/gh/ogarcia/docker-taskd.svg?style=svg)](https://circleci.com/gh/ogarcia/docker-taskd)
 
-(c) 2015-2023 Óscar García Amor
+(c) 2015-2024 Óscar García Amor
 
 Redistribution, modifications and pull requests are welcomed under the terms
 of MIT license.
