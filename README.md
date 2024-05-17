@@ -1,3 +1,42 @@
+# DEPRECATION WARNING
+
+Since the [release of Taskwarrior version 3.0.0][tr] the taskd server is no
+longer applicable and has been replaced by [TaskChampion Sync-Server][tcss].
+For that reason, this repository together with the container image will be
+[archived here][archive] in the next days.
+
+Once archived, the repository will appear as a directory inside
+[docker-archived-projects][archive] and will contain everything here
+(including the git history). On the other hand, the docker images will be
+removed from both [Quay][3] and [GitHub][4].
+
+My advice is [to upgrade as soon as possible to Taskwarrior version 3][tr]
+or higher and, if you need it, use the new server. If you want to use the
+new server in Docker do the following.
+
+```sh
+git clone git@github.com:GothenburgBitFactory/taskchampion-sync-server.git
+cd taskchampion-sync-server
+source .env
+docker build -t taskchampion-sync-server .
+mkdir /volume/to/permanet/data # Set your own directory here
+chown 100:100 /volume/to/permanet/data
+docker run -d \
+  --name=task-sync-server \
+  -p 8080:8080 \
+  -v /volume/to/permanet/data:/var/lib/taskchampion-sync-server \
+  taskchampion-sync-server
+```
+
+Note that this new server does not have (for now) user authentication
+methods, so maybe in your case it is more interesting to use a cloud storage
+server as detailed in the [`task-sync(5)` manpage][man].
+
+[tr]: https://taskwarrior.org/docs/upgrade-3/
+[tcss]: https://github.com/GothenburgBitFactory/taskchampion-sync-server
+[archive]: https://github.com/ogarcia/docker-archived-projects
+[man]: https://github.com/GothenburgBitFactory/taskwarrior/blob/develop/doc/man/task-sync.5.in
+
 # Taskwarrior Server (taskd) container [![CircleCI](https://circleci.com/gh/ogarcia/docker-taskd.svg?style=svg)](https://circleci.com/gh/ogarcia/docker-taskd)
 
 (c) 2015-2024 Óscar García Amor
